@@ -18,7 +18,7 @@ export default function Register() {
   const navigate = useNavigate();
 
   const validarPassword = (pwd) => {
-    const regex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/;
+    const regex = /^(?=.*[A-Za-z])(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{6,}$/;    ;
     return regex.test(pwd);
   }
 
@@ -90,7 +90,7 @@ export default function Register() {
             required
           />
           <small className="form-text text-muted">
-            Mínimo 6 caracteres, debe incluir letras y números.
+            Mínimo 6 caracteres, debe incluir letras, números y simbolos.
           </small>
         </div>
         <div className="mb-3">
@@ -104,14 +104,26 @@ export default function Register() {
           />
         </div>
         <div className="mb-3">
-          <label className="form-label">Comuna</label>
-          <input
-            type="text"
-            className="form-control"
-            value={comuna}
-            onChange={(e) => setComuna(e.target.value)}
-            required
-          />
+          <label htmlFor="comuna">Selecciona tu Comuna de la Región de Coquimbo</label>
+          <div>
+          <select id="comuna">
+            <option value="1">Andacollo</option>
+            <option value="2">Coquimbo</option>
+            <option value="3">La Serena</option>
+            <option value="4">La Higuera</option>
+            <option value="5">Paihuano</option>
+            <option value="6">Vicuña</option>
+            <option value="7">Combarbalá</option>
+            <option value="8">Monte Patria</option>
+            <option value="9">Ovalle</option>
+            <option value="10">Punitaqui</option>
+            <option value="11">Río Hurtado</option>
+            <option value="12">Canela</option>
+            <option value="13">Illapel</option>
+            <option value="14">Los Vilos</option>
+            <option value="15">Salamanca</option>
+          </select>
+          </div> 
         </div>
         <div className="mb-3">
           <label className="form-label">Teléfono (opcional)</label>
