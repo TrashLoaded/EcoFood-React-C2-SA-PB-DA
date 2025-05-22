@@ -17,7 +17,8 @@ export default function Register() {
   const navigate = useNavigate();
 
   const validarPassword = (pwd) => {
-    const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_\-+=<>?{}[\]~])[A-Za-z\d!@#$%^&*()_\-+=<>?{}[\]~]{8,}$/;
+    const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{6,}$/;
+
     return regex.test(pwd);
   };
 
@@ -50,7 +51,7 @@ export default function Register() {
     if (!validarPassword(password)) {
       Swal.fire(
         "Contraseña débil",
-        "La contraseña debe tener al menos 8 caracteres, incluyendo mayúsculas, minúsculas, números y un símbolo.",
+        "La contraseña debe tener al menos 6 caracteres, incluyendo mayúsculas, minúsculas, números y un símbolo.",
         "warning"
       );
       return;
@@ -94,6 +95,8 @@ export default function Register() {
             value={nombre}
             onChange={(e) => setNombre(e.target.value)}
             required
+            minLength={2}
+            maxLength={50}
           />
         </div>
         <div className="input-container">
@@ -104,6 +107,8 @@ export default function Register() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
+            minLength={5}
+            maxLength={50}
           />
         </div>
         <div className="input-container">
@@ -114,9 +119,11 @@ export default function Register() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
+            minLength={6}
+            maxLength={20}
           />
           <small className="form-text text-muted">
-            Mínimo 8 caracteres, incluyendo mayúsculas, minúsculas, números y símbolos.
+            Mínimo 6 caracteres, incluyendo mayúsculas, minúsculas, números y símbolos.
           </small>
         </div>
         <div className="input-container">
@@ -127,6 +134,8 @@ export default function Register() {
             value={direccion}
             onChange={(e) => setDireccion(e.target.value)}
             required
+            minLength={5}
+            maxLength={30}
           />
         </div>
         <div className="input-container">
