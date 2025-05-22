@@ -1,7 +1,8 @@
 import { getUserData } from "../services/userService";
 import { useAuth } from "../context/AuthContext";
 import { useState, useEffect } from "react";
-import CerrarSesion from "../components/CerrarSesion"
+import CerrarSesion from "../components/CerrarSesion";
+import "../styles/FormPages.css";
 
 export default function Home() {
   const { user } = useAuth();
@@ -16,7 +17,7 @@ export default function Home() {
   }, [user]);
 
   return (
-    <div className="container mt-5">
+    <div className="container">
       <h2>Bienvenido {userData?.nombre}</h2>
       <p>Tipo de usuario: {userData?.tipo}</p>
       <CerrarSesion />

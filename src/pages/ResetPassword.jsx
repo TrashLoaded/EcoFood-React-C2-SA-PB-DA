@@ -2,9 +2,12 @@ import { useState } from "react";
 import { sendPasswordResetEmail } from "firebase/auth";
 import { auth } from "../services/firebase";
 import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
+import "../styles/FormPages.css";
 
 export default function ResetPassword() {
   const [email, setEmail] = useState("");
+  const navigate = useNavigate();
 
   const handleReset = async (e) => {
     e.preventDefault();
@@ -16,28 +19,46 @@ export default function ResetPassword() {
         "success"
       );
     } catch (error) {
-      Swal.fire("Error", error.message, "error");
+      Swal.fire(
+        "Error",
+        "No se pudo enviar el correo. Verifica que tu dirección sea válida.",
+        "error"
+      );
     }
   };
 
   return (
-    <div className="container mt-5">
-      <h2>Recuperar contraseña</h2>
-      <form onSubmit={handleReset}>
-        <div className="mb-3">
-          <label className="form-label">Correo electrónico</label>
-          <input
-            type="email"
-            className="form-control"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-        </div>
-        <button type="submit" className="btn btn-warning">
-          Enviar correo de recuperación
-        </button>
-      </form>
+    <div className="reset-password-container">
+      <div className="reset-password-box">
+        <h2>Recuperar contraseña</h2>
+        <form onSubmit={handleReset}>
+          <div className="mb-3">
+            <label className="form-label">Correo electrónico</label>
+            <input
+              type="email"
+              className="form-control"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              minLength={5}
+              maxLength={100}
+              placeholder="ejemplo@correo.com"
+            />
+          </div>
+          <button type="submit" className="btn btn-warning w-100 mb-3">
+            Enviar correo de recuperación
+          </button>
+          <div className="text-center">
+            <button
+              type="button"
+              className="btn btn-link"
+              onClick={() => navigate("/login")}
+            >
+              Volver al login
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 }

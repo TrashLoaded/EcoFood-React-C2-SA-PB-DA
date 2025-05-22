@@ -1,11 +1,10 @@
 import { useState } from "react";
-import { createUserWithEmailAndPassword,
-  sendEmailVerification,
- } from "firebase/auth";
+import { createUserWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
 import { auth } from "../services/firebase";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 import { saveUserData } from "../services/userService";
+import "../styles/FormPages.css";
 
 export default function Register() {
   const [email, setEmail] = useState("");
@@ -18,15 +17,42 @@ export default function Register() {
   const navigate = useNavigate();
 
   const validarPassword = (pwd) => {
-    const regex = /^(?=.*[A-Za-z])(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{6,}$/;    ;
+    const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_\-+=<>?{}[\]~])[A-Za-z\d!@#$%^&*()_\-+=<>?{}[\]~]{8,}$/;
     return regex.test(pwd);
-  }
+  };
+
+  const formatTelefono = (value) => {
+    const cleaned = value.replace(/\D/g, ""); 
+    const match = cleaned.match(/^569(\d{4})(\d{4})$/);
+    if (match) {
+      return `+56 9 ${match[1]} ${match[2]}`;
+    }
+    return cleaned.length <= 11 ? cleaned : cleaned.slice(0, 11);
+  };
+
+  const handleTelefonoChange = (e) => {
+    const input = e.target.value;
+    const cleaned = input.replace(/\D/g, "");
+    let fullNumber = cleaned;
+    if (!cleaned.startsWith("56")) {
+      if (cleaned.startsWith("9")) {
+        fullNumber = "569" + cleaned.slice(1);
+      } else {
+        fullNumber = "569" + cleaned;
+      }
+    }
+    setTelefono(formatTelefono(fullNumber));
+  };
 
   const handleRegister = async (e) => {
     e.preventDefault();
 
     if (!validarPassword(password)) {
-      Swal.fire("Contraseña débil", "Debe tener al menos 6 caracteres, incluyendo letras y números", "warning");
+      Swal.fire(
+        "Contraseña débil",
+        "La contraseña debe tener al menos 8 caracteres, incluyendo mayúsculas, minúsculas, números y un símbolo.",
+        "warning"
+      );
       return;
     }
 
@@ -39,7 +65,7 @@ export default function Register() {
         comuna,
         telefono,
         tipo,
-        verificado: false
+        verificado: false,
       });
 
       await sendEmailVerification(cred.user);
@@ -57,10 +83,10 @@ export default function Register() {
   };
 
   return (
-    <div className="container mt-5">
+    <div className="container">
       <h2>Registro de Cliente</h2>
       <form onSubmit={handleRegister}>
-        <div className="mb-3">
+        <div className="input-container">
           <label className="form-label">Nombre completo</label>
           <input
             type="text"
@@ -70,7 +96,7 @@ export default function Register() {
             required
           />
         </div>
-        <div className="mb-3">
+        <div className="input-container">
           <label className="form-label">Correo</label>
           <input
             type="email"
@@ -80,7 +106,7 @@ export default function Register() {
             required
           />
         </div>
-        <div className="mb-3">
+        <div className="input-container">
           <label className="form-label">Contraseña</label>
           <input
             type="password"
@@ -90,10 +116,10 @@ export default function Register() {
             required
           />
           <small className="form-text text-muted">
-            Mínimo 6 caracteres, debe incluir letras, números y simbolos.
+            Mínimo 8 caracteres, incluyendo mayúsculas, minúsculas, números y símbolos.
           </small>
         </div>
-        <div className="mb-3">
+        <div className="input-container">
           <label className="form-label">Dirección</label>
           <input
             type="text"
@@ -103,38 +129,54 @@ export default function Register() {
             required
           />
         </div>
-        <div className="mb-3">
-          <label htmlFor="comuna">Selecciona tu Comuna de la Región de Coquimbo</label>
-          <div>
-          <select id="comuna">
-            <option value="1">Andacollo</option>
-            <option value="2">Coquimbo</option>
-            <option value="3">La Serena</option>
-            <option value="4">La Higuera</option>
-            <option value="5">Paihuano</option>
-            <option value="6">Vicuña</option>
-            <option value="7">Combarbalá</option>
-            <option value="8">Monte Patria</option>
-            <option value="9">Ovalle</option>
-            <option value="10">Punitaqui</option>
-            <option value="11">Río Hurtado</option>
-            <option value="12">Canela</option>
-            <option value="13">Illapel</option>
-            <option value="14">Los Vilos</option>
-            <option value="15">Salamanca</option>
+        <div className="input-container">
+          <label className="form-label">Comuna</label>
+          <select
+            className="form-select"
+            value={comuna}
+            onChange={(e) => setComuna(e.target.value)}
+            required
+          >
+            <option value="">-- Selecciona una comuna --</option>
+            <option value="Andacollo">Andacollo</option>
+            <option value="Coquimbo">Coquimbo</option>
+            <option value="La Serena">La Serena</option>
+            <option value="La Higuera">La Higuera</option>
+            <option value="Paihuano">Paihuano</option>
+            <option value="Vicuña">Vicuña</option>
+            <option value="Combarbalá">Combarbalá</option>
+            <option value="Monte Patria">Monte Patria</option>
+            <option value="Ovalle">Ovalle</option>
+            <option value="Punitaqui">Punitaqui</option>
+            <option value="Río Hurtado">Río Hurtado</option>
+            <option value="Canela">Canela</option>
+            <option value="Illapel">Illapel</option>
+            <option value="Los Vilos">Los Vilos</option>
+            <option value="Salamanca">Salamanca</option>
           </select>
-          </div> 
         </div>
-        <div className="mb-3">
+        <div className="input-container">
           <label className="form-label">Teléfono (opcional)</label>
           <input
-            type="tel"
+            type="text"
             className="form-control"
             value={telefono}
-            onChange={(e) => setTelefono(e.target.value)}
+            onChange={handleTelefonoChange}
+            placeholder="+56 9 1234 5678"
           />
         </div>
-        <button type="submit" className="btn btn-success">Registrar</button>
+        <button type="submit" className="btn btn-success">
+          Registrar
+        </button>
+        <div className="mt-3">
+          <button
+            type="button"
+            className="btn btn-secondary"
+            onClick={() => navigate("/login")}
+          >
+            Volver al login
+          </button>
+        </div>
       </form>
     </div>
   );

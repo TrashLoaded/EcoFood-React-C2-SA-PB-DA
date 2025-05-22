@@ -8,6 +8,7 @@ import {
 import { auth } from "../services/firebase";
 import Swal from "sweetalert2";
 import { getUserData } from '../services/userService';
+import "../styles/FormPages.css";
 
 export default function Login() {
   const [email, setEmail] = useState(""); 
@@ -35,45 +36,71 @@ export default function Login() {
 
     } catch (error) {
       console.error("Error en login:", error);
-      Swal.fire("Error", "Credenciales incorrectas o cuenta no existente", "error");
+      Swal.fire(
+        "Acceso denegado",
+        "Usuario o contraseña incorrectos. Si ya te registraste, revisa tu correo y confirma tu cuenta.",
+        "error"
+      );
     }
   };
 
   return (
-    <div className="container mt-5">
-      <h2>Iniciar Sesión</h2>
+    <div className="container login-container">
+      <h2 className="text-center">Iniciar Sesión</h2>
       <form onSubmit={handleLogin}>
-        <div className="mb-3">
+        
+        <div className="input-container">
           <label className="form-label">Correo electrónico</label>
-          <input
-            type="email"
-            className="form-control"
-            value={email}  
-            onChange={(e) => setEmail(e.target.value)}  
-            required
-          />
-        </div>
-        <div className="mb-3">
-          <label className="form-label">Contraseña</label>
-          <input
-            type="password"
-            className="form-control"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
+          <div className="input-wrapper">
+            <input
+              type="email"
+              className="form-control"
+              value={email}  
+              onChange={(e) => setEmail(e.target.value)}  
+              required
+              minLength={5}
+              maxLength={100}
+            />
+          </div>
         </div>
 
-        <button type="submit" className="btn btn-primary">
+        <div className="input-container">
+          <label className="form-label">Contraseña</label>
+          <div className="input-wrapper">
+            <input
+              type="password"
+              className="form-control"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              minLength={8}
+              maxLength={32}
+            />
+          </div>
+        </div>
+
+        <button type="submit" className="btn btn-success w-100">
           Iniciar Sesión
         </button>
-        <div className="mt-3">
+
+        <div className="mt-3 text-center">
           <button
             type="button"
             className="btn btn-link"
             onClick={() => navigate("/recuperar")}
           >
             ¿Olvidaste tu contraseña?
+          </button>
+        </div>
+
+        <div className="mt-2 text-center">
+          <span>¿No tienes cuenta? </span>
+          <button
+            type="button"
+            className="btn btn-link p-0 align-baseline"
+            onClick={() => navigate("/registro")}
+          >
+            Regístrate
           </button>
         </div>
       </form>
