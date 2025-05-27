@@ -20,17 +20,14 @@ export default function Login() {
     try {
       await setPersistence(auth, browserLocalPersistence);
       const cred = await signInWithEmailAndPassword(auth, email, password);
-
+      
       if (!cred.user.emailVerified) {
-        Swal.fire(
-          "Verificación requerida",
-          "Debes verificar tu correo electrónico antes de iniciar sesión.",
-          "warning"
-        );
+        Swal.fire("Verificación requerida", "Debes verificar tu correo antes de ingresar.", "warning");
         return;
       }
-
+      
       const datos = await getUserData(cred.user.uid);
+<<<<<<< HEAD
       if (datos.tipo === "admin") navigate("/admin/dashboard");
       else if (datos.tipo === "cliente") navigate("/cliente/dashboard");
 
@@ -43,6 +40,17 @@ export default function Login() {
       );
     }
   };
+=======
+      
+      if (datos.tipo === "admin") navigate("/admin/dashboard");
+      
+      else if (datos.tipo === "cliente") navigate("/cliente/dashboard");
+      // eslint-disable-next-line no-unused-vars
+      } catch (error) {
+        Swal.fire("Error", "Credenciales incorrectas", "error");
+      }
+    };
+>>>>>>> 710f25fde4e17dbdb3b7e18c7e2a86b38a7797e2
 
   return (
     <div className="container login-container">

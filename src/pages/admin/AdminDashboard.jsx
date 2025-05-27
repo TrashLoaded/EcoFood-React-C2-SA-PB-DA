@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { useEffect, useState } from "react";
 import { getEmpresas } from "../../services/empresaFirebase";
 import { getUsuariosPorTipo } from "../../services/clienteFirebase";
@@ -70,3 +71,8 @@ export default function AdminDashboard() {
     </div>
   );
 }
+=======
+export default function AdminDashboard() {
+    return <h2>Panel del Administrador</h2>;
+}
+>>>>>>> 710f25fde4e17dbdb3b7e18c7e2a86b38a7797e2
