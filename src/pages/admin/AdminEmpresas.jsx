@@ -106,7 +106,6 @@ export default function AdminEmpresas() {
           Nueva Empresa
         </button>
 
-        {/* Scroll horizontal si tabla se desborda */}
         <div style={{ overflowX: "auto" }}>
           <table className="table table-striped">
             <thead className="table-light">
