@@ -17,7 +17,7 @@ export default function AdminClientes() {
     comuna: "",
     password: "",
   });
-
+  
   const cargarClientes = async () => {
     const data = await getClientes();
     setClientes(data);
@@ -138,6 +138,8 @@ export default function AdminClientes() {
                   onChange={(e) =>
                     setFormData({ ...formData, nombre: e.target.value })
                   }
+                  minLength={2}
+                  maxLength={50}
                 />
                 <input
                   className="form-control mb-2"
@@ -147,15 +149,32 @@ export default function AdminClientes() {
                     setFormData({ ...formData, email: e.target.value })
                   }
                   disabled={clienteActivo !== null}
+                  minLength={5}
+                  maxLength={50}
                 />
-                <input
-                  className="form-control mb-2"
+                <select
+                  className="form-select mb-2"
                   placeholder="Comuna"
                   value={formData.comuna}
-                  onChange={(e) =>
-                    setFormData({ ...formData, comuna: e.target.value })
-                  }
-                />
+                  onChange={(e) => setFormData({ ...formData, comuna: e.target.value })}
+                >
+                  <option value="">-- Selecciona una comuna --</option>
+                  <option value="Andacollo">Andacollo</option>
+                  <option value="Coquimbo">Coquimbo</option>
+                  <option value="La Serena">La Serena</option>
+                  <option value="La Higuera">La Higuera</option>
+                  <option value="Paihuano">Paihuano</option>
+                  <option value="Vicuña">Vicuña</option>
+                  <option value="Combarbalá">Combarbalá</option>
+                  <option value="Monte Patria">Monte Patria</option>
+                  <option value="Ovalle">Ovalle</option>
+                  <option value="Punitaqui">Punitaqui</option>
+                  <option value="Río Hurtado">Río Hurtado</option>
+                  <option value="Canela">Canela</option>
+                  <option value="Illapel">Illapel</option>
+                  <option value="Los Vilos">Los Vilos</option>
+                  <option value="Salamanca">Salamanca</option>
+                </select>
                 {!clienteActivo && (
                   <input
                     type="password"
@@ -165,6 +184,8 @@ export default function AdminClientes() {
                     onChange={(e) =>
                       setFormData({ ...formData, password: e.target.value })
                     }
+                    minLength={6}
+                    maxLength={20}
                   />
                 )}
               </div>

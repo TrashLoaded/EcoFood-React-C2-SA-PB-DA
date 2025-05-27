@@ -5,7 +5,7 @@ export default function AdminLayout() {
   return (
     <div>
       <NavAdmin />
-      <main className="container mt-3">
+      <main>
         <Outlet />
       </main>
     </div>

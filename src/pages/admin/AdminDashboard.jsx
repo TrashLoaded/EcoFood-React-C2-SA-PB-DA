@@ -50,10 +50,7 @@ export default function AdminDashboard() {
     </div>
   </div>
 </div>
-
-
         <hr />
-
         <h4 className="mb-3">Accesos rápidos</h4>
         <div className="d-flex flex-wrap gap-3 justify-content-center" style={{flexWrap: "nowrap"}}>
           <button className="btn btn-outline-primary px-4" onClick={() => navigate("/admin/empresas")}>

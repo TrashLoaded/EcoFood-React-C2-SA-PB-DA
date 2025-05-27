@@ -171,6 +171,8 @@ export default function AdminEmpresas() {
                     placeholder={campo.charAt(0).toUpperCase() + campo.slice(1)}
                     value={formData[campo]}
                     onChange={(e) => setFormData({ ...formData, [campo]: e.target.value })}
+                    minLength={5}
+                    maxLength={50}
                   />
                 ))}
                 {!empresaActiva && (
@@ -180,6 +182,8 @@ export default function AdminEmpresas() {
                     placeholder="Contraseña"
                     value={formData.password}
                     onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                    minLength={6}
+                    maxLength={20}
                   />
                 )}
               </div>

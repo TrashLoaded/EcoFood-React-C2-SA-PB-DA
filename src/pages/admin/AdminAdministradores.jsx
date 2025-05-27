@@ -140,6 +140,8 @@ export default function AdminAdministradores() {
                   placeholder="Nombre"
                   value={formData.nombre}
                   onChange={(e) => setFormData({ ...formData, nombre: e.target.value })}
+                  minLength={2}
+                  maxLength={50}
                 />
                 <input
                   className="form-control mb-2"
@@ -147,6 +149,8 @@ export default function AdminAdministradores() {
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                   disabled={adminActivo !== null}
+                  minLength={2}
+                  maxLength={50}
                 />
                 {!adminActivo && (
                   <input
@@ -155,6 +159,8 @@ export default function AdminAdministradores() {
                     placeholder="Contraseña"
                     value={formData.password}
                     onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                    minLength={6}
+                    maxLength={20}
                   />
                 )}
               </div>
