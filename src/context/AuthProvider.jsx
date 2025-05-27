@@ -2,25 +2,35 @@ import { useState, useEffect } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../services/firebase";
 import { AuthContext } from "./AuthContext";
+import { getUserData } from "../services/userService";
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser);
-      setLoading(false);
-    });
+    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+      if (firebaseUser) {
+        setUser (firebaseUser);
+        try {
+          const data = await getUserData(firebaseUser.uid);
+          setUserData(data);
+        } catch (error) {
+          setUserData(null);
+        }
+    } else {
+      setUser(null);
+      setUserData(null);
+    }
+      setLoading(null);
+  });
+
     return () => unsubscribe();
   }, []);
 
-  if (loading) {
-    return <div>Cargando autenticación...</div>;
-  }
-
   return (
-    <AuthContext.Provider value={{ user }}>
+    <AuthContext.Provider value={{ user, userData, loading }}>
       {children}
     </AuthContext.Provider>
   );

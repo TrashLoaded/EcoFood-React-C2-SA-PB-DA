@@ -260,3 +260,17 @@ button:hover {
     padding: 20px;
   }
 }
+
+.cliente-dashboard {
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+
+.card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  transform: scale(1.02);
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}

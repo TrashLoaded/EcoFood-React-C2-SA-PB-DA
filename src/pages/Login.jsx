@@ -31,8 +31,8 @@ export default function Login() {
       }
 
       const datos = await getUserData(cred.user.uid);
-      console.log("Bienvenido", datos.nombre, "Tipo:", datos.tipo);
-      navigate("/home");
+      if (datos.tipo === "admin") navigate("/admin/dashboard");
+      else if (datos.tipo === "cliente") navigate("/cliente/dashboard");
 
     } catch (error) {
       console.error("Error en login:", error);

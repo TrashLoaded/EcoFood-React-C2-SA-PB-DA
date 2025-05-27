@@ -5,6 +5,15 @@ import Register from "../pages/Register";
 import Home from "../pages/Home";
 import NotFound from "../pages/NotFound";
 import ProtectedRoute from "./ProtectedRoute";
+import ProtectedByRole from "./ProtectedByRole";
+import ClienteDashboard from "../pages/cliente/ClienteDashboard";
+import AdminLayout from "../components/layouts/Admin/AdminLayout";
+import AdminDashboard from "../pages/admin/AdminDashboard";
+import AdminProductos from "../pages/admin/AdminProductos";
+import AdminUsuarios from "../pages/admin/AdminUsuarios";
+import AdminAdministradores from "../pages/admin/AdminAdministradores";
+import AdminEmpresas from "../pages/admin/AdminEmpresas";
+import AdminClientes from "../pages/admin/AdminClientes";
 
 export default function AppRouter() {
   return (
@@ -13,6 +22,7 @@ export default function AppRouter() {
       <Route path="/login" element={<Login />} />
       <Route path="/registro" element={<Register />} />
       <Route path="/recuperar" element={<ResetPassword />} />
+
       <Route
         path="/home"
         element={
@@ -21,7 +31,32 @@ export default function AppRouter() {
           </ProtectedRoute>
         }
       />
-      
+
+      <Route
+        path="/cliente/dashboard"
+        element={
+          <ProtectedByRole allowed={["cliente"]}>
+            <ClienteDashboard />
+          </ProtectedByRole>
+        }
+      />
+
+      <Route
+        path="/admin"
+        element={
+          <ProtectedByRole allowed={["admin"]}>
+            <AdminLayout />
+          </ProtectedByRole>
+        }
+      >
+        <Route path="dashboard" element={<AdminDashboard />} />
+        <Route path="productos" element={<AdminProductos />} />
+        <Route path="usuarios" element={<AdminUsuarios />} />
+        <Route path="empresas" element={<AdminEmpresas />} />
+        <Route path="administradores" element={<AdminAdministradores />} />
+        <Route path="clientes" element={<AdminClientes />} />
+      </Route>
+
       <Route path="*" element={<NotFound />} />
     </Routes>
   );
