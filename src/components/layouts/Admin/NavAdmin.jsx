@@ -6,8 +6,8 @@ export default function NavAdmin() {
   const { userData } = useAuth();
 
   return (
-    <nav className="navbar navbar-expand-lg bg-light border mb-4 shadow-sm">
-      <div className="container-fluid rounded-3 px-4 py-2 bg-white">
+    <nav className="navbar navbar-expand-lg border-bottom bg-white shadow-sm mb-4 fixed-top">
+      <div className="container-fluid px-4 py-2">
         <span className="navbar-brand fw-bold">
           Ecofood Admin
           <small className="d-block text-muted" style={{ fontSize: "0.8rem" }}>

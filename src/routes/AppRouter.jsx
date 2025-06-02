@@ -1,7 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
-import Home from "../pages/home";
+import Home from "../pages/Home";
 import ProtectedRoute from "./ProtectedRoute";
 import ProtectedByRole from "./ProtectedByRole";
 import ClienteDashboard from "../pages/cliente/ClienteDashboard";
@@ -14,7 +14,9 @@ import AdminEmpresas from "../pages/admin/AdminEmpresas";
 import AdminClientes from "../pages/admin/AdminClientes";
 import { Navigate } from "react-router-dom";
 import ResetPassword from "../pages/ResetPassword";
-import NotFound from "../pages/NotFound"; 
+import NotFound from "../pages/NotFound";
+import PerfilEmpresa from "../pages/empresa/PerfilEmpresa";
+import ProductosEmpresa from "../pages/empresa/ProductosEmpresa";
 
 
 
@@ -59,6 +61,23 @@ export default function AppRouter() {
         <Route path="administradores" element={<AdminAdministradores />} />
         <Route path="clientes" element={<AdminClientes />} />
       </Route>
+
+      <Route
+        path="/empresa/perfil"
+        element={
+          <ProtectedByRole allowed={["empresa"]}>
+            <PerfilEmpresa />
+          </ProtectedByRole>
+        }
+      />
+      <Route
+        path="/empresa/productos"
+        element={
+          <ProtectedByRole allowed={["empresa"]}>
+            <ProductosEmpresa />
+          </ProtectedByRole>
+        }
+      />
 
       <Route path="*" element={<NotFound />} />
     </Routes>

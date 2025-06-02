@@ -2,7 +2,7 @@ import { getUserData } from "../services/userService";
 import { useAuth } from "../context/AuthContext";
 import { useState, useEffect } from "react";
 import CerrarSesion from "../components/CerrarSesion";
-import "../styles/FormPages.css";
+import "../index.css";
 
 export default function Home() {
   const { user } = useAuth();
@@ -10,17 +10,21 @@ export default function Home() {
 
   useEffect(() => {
     const fetch = async () => {
-      const datos = await getUserData(user.uid);
-      setUserData(datos);
+      if (user) {
+        const datos = await getUserData(user.uid);
+        setUserData(datos);
+      }
     };
-    if (user) fetch();
+    fetch();
   }, [user]);
 
   return (
     <div className="container">
-      <h2>Bienvenido {userData?.nombre}</h2>
-      <p>Tipo de usuario: {userData?.tipo}</p>
-      <CerrarSesion />
+      <div className="card text-center">
+        <h2 className="mb-3">Bienvenido {userData?.nombre}</h2>
+        <p className="mb-3">Tipo de usuario: {userData?.tipo}</p>
+        <CerrarSesion />
+      </div>
     </div>
   );
 }

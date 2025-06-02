@@ -17,30 +17,71 @@ export default function AdminClientes() {
     comuna: "",
     password: "",
   });
-  
+
   const cargarClientes = async () => {
     const data = await getClientes();
     setClientes(data);
   };
 
+  const resetForm = () => {
+    setFormData({ nombre: "", email: "", comuna: "", password: "" });
+    setClienteActivo(null);
+  };
+
   const guardar = async () => {
-    if (clienteActivo) {
-      await updateCliente(clienteActivo.id, formData);
-    } else {
-      try {
+    const { nombre, email, comuna, password } = formData;
+
+    if (!nombre || !email || !comuna) {
+      Swal.fire("Campos obligatorios", "Nombre, email y comuna son requeridos", "warning");
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      Swal.fire("Email inválido", "Por favor ingresa un email válido", "warning");
+      return;
+    }
+
+    if (nombre.length < 2 || nombre.length > 50) {
+      Swal.fire("Nombre inválido", "El nombre debe tener entre 2 y 50 caracteres", "warning");
+      return;
+    }
+
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
+
+    if (!clienteActivo) {
+      if (!password) {
+        Swal.fire("Falta contraseña", "Debes ingresar una contraseña para el nuevo cliente.", "warning");
+        return;
+      }
+      if (!passwordRegex.test(password)) {
+        Swal.fire(
+          "Contraseña insegura.",
+          "La contraseña debe tener mínimo 6 carácteres, incluir al menos una mayúscula, una minúscula, un número y un carácter especial.",
+          "warning"
+        );
+        return;
+      }
+    }
+
+    try {
+      if (clienteActivo) {
+        await updateCliente(clienteActivo.id, formData);
+      } else {
         await registrarClienteConAuth(formData);
         Swal.fire(
           "Cliente registrado",
           "Se envió un correo de verificación",
           "success"
         );
-      } catch (err) {
-        Swal.fire("Error", err.message, "error");
       }
+
+      setShowModal(false);
+      resetForm();
+      cargarClientes();
+    } catch (err) {
+      Swal.fire("Error", err.message, "error");
     }
-    setShowModal(false);
-    setFormData({ nombre: "", email: "", comuna: "", password: "" });
-    cargarClientes();
   };
 
   const eliminar = async (id) => {
@@ -50,6 +91,7 @@ export default function AdminClientes() {
       showCancelButton: true,
       confirmButtonText: "Sí",
     });
+
     if (result.isConfirmed) {
       await deleteCliente(id);
       cargarClientes();
@@ -61,19 +103,11 @@ export default function AdminClientes() {
   }, []);
 
   return (
-    <div className="container mt-4">
-      <div className="bg-white p-4 rounded shadow-sm">
-        <h3 className="mb-3">Clientes Registrados</h3>
-        <button
-          className="btn btn-primary mb-3"
-          onClick={() => {
-            setClienteActivo(null);
-            setFormData({ nombre: "", email: "", comuna: "", password: "" });
-            setShowModal(true);
-          }}
-        >
-          Nuevo Cliente
-        </button>
+    <div className="container mt-5">
+      <div className="card shadow p-4">
+        <h2 className="card-title mb-2">Gestión de Clientes</h2>
+        <p className="text-muted mb-4">Listado y administración de clientes registrados en EcoFood</p>
+
         <div style={{ overflowX: "auto" }}>
           <table className="table table-striped">
             <thead className="table-light">
@@ -103,7 +137,7 @@ export default function AdminClientes() {
                         Editar
                       </button>
                       <button
-                        className="btn btn-danger btn-sm ms-2"
+                        className="btn btn-danger btn-sm"
                         onClick={() => eliminar(c.id)}
                       >
                         Eliminar
@@ -112,15 +146,49 @@ export default function AdminClientes() {
                   </td>
                 </tr>
               ))}
+              {clientes.length === 0 && (
+                <tr>
+                  <td colSpan="4" className="text-center text-muted">
+                    No hay clientes registrados.
+                  </td>
+                </tr>
+              )}
             </tbody>
           </table>
+        </div>
+
+        <div className="d-flex justify-content-end mt-3">
+          <button
+            className="btn btn-primary"
+            onClick={() => {
+              resetForm();
+              setShowModal(true);
+            }}
+          >
+            Nuevo Cliente
+          </button>
         </div>
       </div>
 
       {showModal && (
-        <div className="modal d-block" tabIndex="-1">
-          <div className="modal-dialog">
-            <div className="modal-content">
+        <div
+          className="modal d-block"
+          tabIndex="-1"
+          style={{
+            backgroundColor: "rgba(0, 0, 0, 0.5)",
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: "100vw",
+            height: "100vh",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            zIndex: 1050,
+          }}
+        >
+          <div className="modal-dialog modal-dialog-centered">
+            <div className="modal-content shadow">
               <div className="modal-header">
                 <h5 className="modal-title">
                   {clienteActivo ? "Editar Cliente" : "Nuevo Cliente"}
@@ -154,9 +222,10 @@ export default function AdminClientes() {
                 />
                 <select
                   className="form-select mb-2"
-                  placeholder="Comuna"
                   value={formData.comuna}
-                  onChange={(e) => setFormData({ ...formData, comuna: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, comuna: e.target.value })
+                  }
                 >
                   <option value="">-- Selecciona una comuna --</option>
                   <option value="Andacollo">Andacollo</option>

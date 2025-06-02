@@ -8,7 +8,7 @@ import {
 import { auth } from "../services/firebase";
 import Swal from "sweetalert2";
 import { getUserData } from '../services/userService';
-import "../styles/FormPages.css";
+import "../index.css";
 
 export default function Login() {
   const [email, setEmail] = useState(""); 
@@ -22,10 +22,14 @@ export default function Login() {
       const cred = await signInWithEmailAndPassword(auth, email, password);
       
       if (!cred.user.emailVerified) {
-        Swal.fire("Verificación requerida", "Debes verificar tu correo antes de ingresar.", "warning");
+        Swal.fire(
+          "Verificación requerida",
+          "Debes verificar tu correo antes de ingresar.",
+          "warning"
+        );
         return;
       }
-      
+
       const datos = await getUserData(cred.user.uid);
 
       if (datos.tipo === "admin") navigate("/admin/dashboard");
@@ -42,13 +46,12 @@ export default function Login() {
   };
 
   return (
-    <div className="container login-container">
-      <h2 className="text-center">Iniciar Sesión</h2>
-      <form onSubmit={handleLogin}>
-        
-        <div className="input-container">
-          <label className="form-label">Correo electrónico</label>
-          <div className="input-wrapper">
+    <div className="container">
+      <div className="card">
+        <h2 className="card-title">Iniciar Sesión</h2>
+        <form onSubmit={handleLogin}>
+          <div className="input-container">
+            <label className="form-label">Correo electrónico</label>
             <input
               type="email"
               className="form-control"
@@ -59,11 +62,9 @@ export default function Login() {
               maxLength={100}
             />
           </div>
-        </div>
 
-        <div className="input-container">
-          <label className="form-label">Contraseña</label>
-          <div className="input-wrapper">
+          <div className="input-container">
+            <label className="form-label">Contraseña</label>
             <input
               type="password"
               className="form-control"
@@ -74,33 +75,33 @@ export default function Login() {
               maxLength={32}
             />
           </div>
-        </div>
 
-        <button type="submit" className="btn btn-success w-100">
-          Iniciar Sesión
-        </button>
-
-        <div className="mt-3 text-center">
-          <button
-            type="button"
-            className="btn btn-link"
-            onClick={() => navigate("/recuperar")}
-          >
-            ¿Olvidaste tu contraseña?
+          <button type="submit" className="btn btn-success">
+            Iniciar Sesión
           </button>
-        </div>
 
-        <div className="mt-2 text-center">
-          <span>¿No tienes cuenta? </span>
-          <button
-            type="button"
-            className="btn btn-link p-0 align-baseline"
-            onClick={() => navigate("/registro")}
-          >
-            Regístrate
-          </button>
-        </div>
-      </form>
+          <div className="mt-3 text-center">
+            <button
+              type="button"
+              className="btn btn-link"
+              onClick={() => navigate("/recuperar")}
+            >
+              ¿Olvidaste tu contraseña?
+            </button>
+          </div>
+
+          <div className="mt-2 text-center">
+            <span>¿No tienes cuenta? </span>
+            <button
+              type="button"
+              className="btn btn-link p-0 align-baseline"
+              onClick={() => navigate("/registro")}
+            >
+              Regístrate
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 }
