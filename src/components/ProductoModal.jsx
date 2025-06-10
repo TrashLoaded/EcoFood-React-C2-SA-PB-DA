@@ -33,8 +33,13 @@ export default function ProductoModal({ productoEditar, onGuardar, onCerrar }) {
       Swal.fire("Error", "La fecha de vencimiento es obligatoria", "warning");
       return false;
     }
-    if (new Date(vencimiento) < new Date()) {
-      Swal.fire("Error", "La fecha de vencimiento debe ser futura", "warning");
+    // Validación fecha vencimiento ignorando horas
+    const hoy = new Date();
+    hoy.setHours(0, 0, 0, 0);
+    const fechaVenc = new Date(vencimiento);
+    fechaVenc.setHours(0, 0, 0, 0);
+    if (fechaVenc < hoy) {
+      Swal.fire("Error", "La fecha de vencimiento debe ser hoy o futura", "warning");
       return false;
     }
     if (cantidad <= 0) {

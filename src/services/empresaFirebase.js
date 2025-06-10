@@ -1,5 +1,5 @@
 import { db, secondaryAuth } from "./firebase";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
 import {
   setDoc,
   doc,
@@ -20,8 +20,11 @@ export const addEmpresa = async (empresaData) => {
     ...resto,
     email,
     tipo: "empresa",
+    verificado: false,
   });
 
+  await sendEmailVerification(cred.user);
+  
   await secondaryAuth.signOut(); 
 };
 

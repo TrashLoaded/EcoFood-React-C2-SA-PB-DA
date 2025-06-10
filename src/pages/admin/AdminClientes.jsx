@@ -71,7 +71,7 @@ export default function AdminClientes() {
         await registrarClienteConAuth(formData);
         Swal.fire(
           "Cliente registrado",
-          "Se envió un correo de verificación",
+          "Se envió un correo de verificación al cliente",
           "success"
         );
       }

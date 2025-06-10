@@ -34,6 +34,10 @@ export default function Login() {
 
       if (datos.tipo === "admin") navigate("/admin/dashboard");
       else if (datos.tipo === "cliente") navigate("/cliente/dashboard");
+      else if (datos.tipo === "empresa") navigate("/empresa/perfil");
+      else {
+        Swal.fire("Error", "Tu rol no tiene una ruta asignada.", "error");
+      }
 
     } catch (error) {
       console.error("Error en login:", error);

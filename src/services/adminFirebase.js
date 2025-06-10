@@ -1,5 +1,5 @@
 import { db, secondaryAuth } from "./firebase";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
 import {
   doc,
   setDoc,
@@ -21,6 +21,8 @@ export const registrarAdmin = async ({ email, password, nombre }) => {
   });
 
   await secondaryAuth.signOut();
+
+  await sendEmailVerification(cred.user);
 };
 
 export const getAdministradores = async () => {

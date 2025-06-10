@@ -2,8 +2,15 @@ import React from "react";
 
 export default function ProductoCard({ producto, onEditar, onEliminar }) {
   const hoy = new Date();
-  const vencimiento = new Date(producto.vencimiento);
-  const diasParaVencer = Math.ceil((vencimiento - hoy) / (1000 * 60 * 60 * 24));
+  hoy.setHours(0, 0, 0, 0);
+
+  const vencimiento = producto.vencimiento?.toDate
+    ? producto.vencimiento.toDate()
+    : new Date(producto.vencimiento);
+  vencimiento.setHours(0, 0, 0, 0);
+
+  const diffTime = vencimiento - hoy;
+  const diasParaVencer = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
   return (
     <div className="card mb-3 shadow-sm">
@@ -12,14 +19,19 @@ export default function ProductoCard({ producto, onEditar, onEliminar }) {
         <p className="card-text">{producto.descripcion}</p>
         <p className="card-text">
           <small className="text-muted">
-            Vence el: {producto.vencimiento}{" "}
+            Vence el: {vencimiento.toISOString().split("T")[0]}{" "}
             {diasParaVencer <= 3 && diasParaVencer >= 0 && (
-              <span className="badge bg-warning text-dark ms-2">
+              <span
+                className="badge bg-warning text-dark ms-2"
+                title={`Por vencer en ${diasParaVencer} día${diasParaVencer > 1 ? "s" : ""}`}
+              >
                 Por vencer en {diasParaVencer} día{diasParaVencer > 1 ? "s" : ""}
               </span>
             )}
             {diasParaVencer < 0 && (
-              <span className="badge bg-danger ms-2">Vencido</span>
+              <span className="badge bg-danger ms-2" title="Producto vencido">
+                Vencido
+              </span>
             )}
           </small>
         </p>

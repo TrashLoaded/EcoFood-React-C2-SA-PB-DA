@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { getEmpresaById, updateEmpresa } from "../../services/empresaService";
 import Swal from "sweetalert2";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
 
 export default function PerfilEmpresa() {
   const [empresaId, setEmpresaId] = useState(null);
@@ -9,21 +10,23 @@ export default function PerfilEmpresa() {
   const [editando, setEditando] = useState(false);
   const [formData, setFormData] = useState({
     nombre: "",
-    correo: "",
-    ubicacion: "",
+    direccion: "",
   });
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const auth = getAuth();
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         setEmpresaId(user.uid);
+        localStorage.setItem("empresaId", user.uid);
       } else {
         setEmpresaId(null);
         setEmpresa(null);
+        localStorage.removeItem("empresaId");
       }
     });
-
     return () => unsubscribe();
   }, []);
 
@@ -37,8 +40,7 @@ export default function PerfilEmpresa() {
           setEmpresa(data);
           setFormData({
             nombre: data.nombre || "",
-            correo: data.correo || "",
-            ubicacion: data.ubicacion || "",
+            direccion: data.direccion || "",
           });
         } else {
           setEmpresa(null);
@@ -51,19 +53,24 @@ export default function PerfilEmpresa() {
     cargar();
   }, [empresaId]);
 
+  const handleLogout = () => {
+    sessionStorage.removeItem("token");
+    navigate("/login");
+  };
+
   const guardarCambios = async () => {
     if (!formData.nombre.trim()) {
       Swal.fire("Error", "El nombre es obligatorio", "warning");
       return;
     }
-    if (!formData.ubicacion.trim()) {
+    if (!formData.direccion.trim()) {
       Swal.fire("Error", "La ubicación es obligatoria", "warning");
       return;
     }
     try {
       await updateEmpresa(empresaId, {
         nombre: formData.nombre,
-        ubicacion: formData.ubicacion,
+        direccion: formData.direccion,
       });
       Swal.fire("Guardado", "Datos actualizados con éxito", "success");
       setEmpresa({ ...empresa, ...formData });
@@ -74,68 +81,128 @@ export default function PerfilEmpresa() {
     }
   };
 
-  if (!empresaId) return <div>Por favor inicia sesión para ver tu perfil.</div>;
-  if (!empresa) return <div>Cargando perfil...</div>;
+  const cancelarEdicion = () => {
+    setFormData({
+      nombre: empresa.nombre,
+      direccion: empresa.direccion,
+    });
+    setEditando(false);
+  };
+
+  if (!empresaId)
+    return (
+      <div className="text-center mt-5 fs-5">
+        Por favor inicia sesión para ver tu perfil.
+      </div>
+    );
+  if (!empresa)
+    return (
+      <div className="text-center mt-5 fs-5">
+        Cargando perfil...
+      </div>
+    );
 
   return (
-    <div className="container mt-4">
-      <div className="card p-4 shadow">
-        <h3>Perfil de Empresa</h3>
+    <div className="container mt-5" style={{ maxWidth: "700px" }}>
+      <div
+        className="card shadow-lg p-5 rounded-4 border border-success"
+        style={{ backgroundColor: "#f9faff" }}
+      >
+        <h1
+          className="mb-4 text-dark text-center"
+          style={{ fontWeight: "700", fontSize: "2.5rem", letterSpacing: "1.2px" }}
+        >
+          Perfil de Empresa
+        </h1>
 
-        <div className="mb-3">
-          <label className="form-label">Nombre</label>
+        <div className="mb-4">
+          <label className="form-label fw-bold fs-5">Nombre</label>
           {editando ? (
             <input
               type="text"
-              className="form-control"
+              className="form-control form-control-lg"
               value={formData.nombre}
               onChange={(e) =>
                 setFormData({ ...formData, nombre: e.target.value })
               }
               minLength={2}
               maxLength={50}
+              autoFocus
             />
           ) : (
-            <p>{empresa.nombre}</p>
+            <p className="fs-5">{empresa.nombre}</p>
           )}
         </div>
 
-        <div className="mb-3">
-          <label className="form-label">Correo</label>
-          <p>{empresa.correo}</p>
+        <div className="mb-4">
+          <label className="form-label fw-bold fs-5">Correo</label>
+          <input
+            className="form-control form-control-lg"
+            value={empresa.email}
+            disabled
+          />
         </div>
 
-        <div className="mb-3">
-          <label className="form-label">Ubicación</label>
+        <div className="mb-4">
+          <label className="form-label fw-bold fs-5">RUT</label>
+          <input
+            className="form-control form-control-lg"
+            value={empresa.rut || ""}
+            disabled
+          />
+        </div>
+
+        <div className="mb-5">
+          <label className="form-label fw-bold fs-5">Ubicación</label>
           {editando ? (
             <input
               type="text"
-              className="form-control"
-              value={formData.ubicacion}
+              className="form-control form-control-lg"
+              value={formData.direccion}
               onChange={(e) =>
-                setFormData({ ...formData, ubicacion: e.target.value })
+                setFormData({ ...formData, direccion: e.target.value })
               }
               minLength={2}
               maxLength={100}
             />
           ) : (
-            <p>{empresa.ubicacion}</p>
+            <p className="fs-5">{empresa.direccion}</p>
           )}
         </div>
 
         {editando ? (
-          <>
-            <button className="btn btn-success me-2" onClick={guardarCambios}>
+          <div className="d-flex justify-content-center gap-3">
+            <button
+              className="btn btn-success btn-lg px-4"
+              onClick={guardarCambios}
+            >
               Guardar
             </button>
-            <button className="btn btn-secondary" onClick={() => setEditando(false)}>
+            <button
+              className="btn btn-outline-secondary btn-lg px-4"
+              onClick={cancelarEdicion}
+            >
               Cancelar
             </button>
-          </>
+          </div>
         ) : (
-          <button className="btn btn-primary" onClick={() => setEditando(true)}>
-            Editar Perfil
-          </button>
+          <div className="d-flex justify-content-center gap-3">
+            <button
+              className="btn btn-dark btn-lg px-5"
+              onClick={() => setEditando(true)}
+            >
+              Editar Perfil
+            </button>
+            <button className="btn btn-danger btn-lg px-5" onClick={handleLogout}>
+              Cerrar sesión
+            </button>
+            <button
+              className="btn btn-success btn-lg px-5"
+              onClick={() => navigate("/empresa/productos", {state: { empresaId} })}
+            >
+              Gestión de Productos
+            </button>
+          </div>
         )}
       </div>
     </div>

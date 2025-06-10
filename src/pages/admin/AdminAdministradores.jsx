@@ -22,7 +22,7 @@ export default function AdminAdministradores() {
   const auth = getAuth();
   const usuarioActual = auth.currentUser;
 
-  const UID_ADMIN_PRINCIPAL = "WQzx3NxUVAZWHYNqNysNfqp2g9G2";
+  const UID_ADMIN_PRINCIPAL = "6aFWRkNXoEXZJSeCqAKDoqsiAJE2";
 
   const cargarAdmins = async () => {
     const data = await getAdministradores();
