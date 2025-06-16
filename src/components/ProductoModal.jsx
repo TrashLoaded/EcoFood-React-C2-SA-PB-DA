@@ -33,7 +33,6 @@ export default function ProductoModal({ productoEditar, onGuardar, onCerrar }) {
       Swal.fire("Error", "La fecha de vencimiento es obligatoria", "warning");
       return false;
     }
-    // Validación fecha vencimiento ignorando horas
     const hoy = new Date();
     hoy.setHours(0, 0, 0, 0);
     const fechaVenc = new Date(vencimiento);
@@ -95,6 +94,8 @@ export default function ProductoModal({ productoEditar, onGuardar, onCerrar }) {
               onChange={(e) =>
                 setFormData({ ...formData, nombre: e.target.value })
               }
+              minLength={2}
+              maxLength={30}
             />
             <textarea
               className="form-control mb-2"
@@ -103,6 +104,8 @@ export default function ProductoModal({ productoEditar, onGuardar, onCerrar }) {
               onChange={(e) =>
                 setFormData({ ...formData, descripcion: e.target.value })
               }
+              minLength={2}
+              maxLength={100}
               rows={3}
             />
             <input
@@ -122,6 +125,7 @@ export default function ProductoModal({ productoEditar, onGuardar, onCerrar }) {
               onChange={(e) =>
                 setFormData({ ...formData, cantidad: Number(e.target.value) })
               }
+              minLength={2}
             />
             <input
               type="number"
@@ -132,6 +136,7 @@ export default function ProductoModal({ productoEditar, onGuardar, onCerrar }) {
               onChange={(e) =>
                 setFormData({ ...formData, precio: Number(e.target.value) })
               }
+              minLength={1}
             />
             <select
               className="form-select"

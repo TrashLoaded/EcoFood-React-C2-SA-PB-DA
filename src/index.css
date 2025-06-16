@@ -33,7 +33,7 @@ body::before {
   position: absolute;
   top: 0; left: 0;
   width: 100%; height: 100%;
-  backdrop-filter: blur(3px); /* blur más suave */
+  backdrop-filter: blur(8px); /* blur más suave */
   background-color: rgba(0, 0, 0, 0.5); /* oscurece para contraste */
   z-index: 0;
   pointer-events: none;
