@@ -38,7 +38,7 @@ export default function AppRouter() {
       />
 
       <Route
-        path="/cliente/dashboard"
+        path="/cliente/home"
         element={
           <ProtectedByRole allowed={["cliente"]}>
             <ClienteDashboard />

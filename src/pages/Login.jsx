@@ -33,7 +33,7 @@ export default function Login() {
       const datos = await getUserData(cred.user.uid);
 
       if (datos.tipo === "admin") navigate("/admin/dashboard");
-      else if (datos.tipo === "cliente") navigate("/cliente/dashboard");
+      else if (datos.tipo === "cliente") navigate("/cliente/home");
       else if (datos.tipo === "empresa") navigate("/empresa/perfil");
       else {
         Swal.fire("Error", "Tu rol no tiene una ruta asignada.", "error");

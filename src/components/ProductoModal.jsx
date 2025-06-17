@@ -116,6 +116,9 @@ export default function ProductoModal({ productoEditar, onGuardar, onCerrar }) {
                 setFormData({ ...formData, vencimiento: e.target.value })
               }
             />
+            <small className="form-text text-muted">
+              Cantidad
+            </small>
             <input
               type="number"
               className="form-control mb-2"
@@ -125,8 +128,11 @@ export default function ProductoModal({ productoEditar, onGuardar, onCerrar }) {
               onChange={(e) =>
                 setFormData({ ...formData, cantidad: Number(e.target.value) })
               }
-              minLength={2}
+              minLength={1}
             />
+            <small className="form-text text-muted">
+              Precio
+            </small>
             <input
               type="number"
               className="form-control mb-2"
@@ -136,21 +142,8 @@ export default function ProductoModal({ productoEditar, onGuardar, onCerrar }) {
               onChange={(e) =>
                 setFormData({ ...formData, precio: Number(e.target.value) })
               }
-              minLength={1}
+              minLength={0}
             />
-            <select
-              className="form-select"
-              value={formData.estado}
-              onChange={(e) =>
-                setFormData({ ...formData, estado: e.target.value })
-              }
-            >
-              {estados.map((e) => (
-                <option key={e} value={e}>
-                  {e.charAt(0).toUpperCase() + e.slice(1)}
-                </option>
-              ))}
-            </select>
           </div>
           <div className="modal-footer">
             <button className="btn btn-secondary" onClick={onCerrar}>

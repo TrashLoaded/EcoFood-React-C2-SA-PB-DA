@@ -15,7 +15,7 @@ export default function PerfilEmpresa() {
   const [editando, setEditando] = useState(false);
   const [formData, setFormData] = useState({
     nombre: "",
-    direccion: "",
+    comuna: "",
   });
 
   const navigate = useNavigate();
@@ -45,7 +45,7 @@ export default function PerfilEmpresa() {
           setEmpresa(data);
           setFormData({
             nombre: data.nombre || "",
-            direccion: data.direccion || "",
+            comuna: data.comuna || "",
           });
         } else {
           setEmpresa(null);
@@ -85,14 +85,14 @@ export default function PerfilEmpresa() {
       Swal.fire("Error", "El nombre es obligatorio", "warning");
       return;
     }
-    if (!formData.direccion.trim()) {
+    if (!formData.comuna.trim()) {
       Swal.fire("Error", "La ubicación es obligatoria", "warning");
       return;
     }
     try {
       await updateEmpresa(empresaId, {
         nombre: formData.nombre,
-        direccion: formData.direccion,
+        comuna: formData.comuna,
       });
       Swal.fire("Guardado", "Datos actualizados con éxito", "success");
       setEmpresa({ ...empresa, ...formData });
@@ -106,7 +106,7 @@ export default function PerfilEmpresa() {
   const cancelarEdicion = () => {
     setFormData({
       nombre: empresa.nombre,
-      direccion: empresa.direccion,
+      comuna: empresa.comuna,
     });
     setEditando(false);
   };
@@ -151,6 +151,8 @@ export default function PerfilEmpresa() {
                 onChange={(e) =>
                   setFormData({ ...formData, nombre: e.target.value })
                 }
+                minLength={2}
+                maxLength={60}
               />
             ) : (
               <p>{empresa.nombre}</p>
@@ -170,16 +172,33 @@ export default function PerfilEmpresa() {
           <div className="mb-3">
             <label className="form-label fw-bold">Ubicación</label>
             {editando ? (
-              <input
-                type="text"
-                className="form-control"
-                value={formData.direccion}
-                onChange={(e) =>
-                  setFormData({ ...formData, direccion: e.target.value })
-                }
-              />
+               <select
+               className="form-select"
+               value={formData.comuna}
+               onChange={(e) =>
+                setFormData({ ...formData, comuna: e.target.value })
+              }
+               required
+             >
+               <option value="">-- Selecciona una comuna --</option>
+               <option value="Andacollo">Andacollo</option>
+               <option value="Coquimbo">Coquimbo</option>
+               <option value="La Serena">La Serena</option>
+               <option value="La Higuera">La Higuera</option>
+               <option value="Paihuano">Paihuano</option>
+               <option value="Vicuña">Vicuña</option>
+               <option value="Combarbalá">Combarbalá</option>
+               <option value="Monte Patria">Monte Patria</option>
+               <option value="Ovalle">Ovalle</option>
+               <option value="Punitaqui">Punitaqui</option>
+               <option value="Río Hurtado">Río Hurtado</option>
+               <option value="Canela">Canela</option>
+               <option value="Illapel">Illapel</option>
+               <option value="Los Vilos">Los Vilos</option>
+               <option value="Salamanca">Salamanca</option>
+             </select>
             ) : (
-              <p>{empresa.direccion}</p>
+              <p>{empresa.comuna}</p>
             )}
           </div>
 
@@ -207,10 +226,10 @@ export default function PerfilEmpresa() {
 
         <div className="flex-grow-1">
           <div className="card mb-4 shadow-sm p-4">
-            <div className="d-flex justify-content-between align-items-center mb-2">
-              <h4 className="fw-bold mb-0">Productos</h4>
+            <div className="d-flex justify-content-between align-items-center mb-0">
+              <h4 className="fw-bold mb-2 m-1">Productos</h4>
               <button
-                className="btn btn-success"
+                className="btn btn-success p-10"
                 onClick={() =>
                   navigate("/empresa/productos", { state: { empresaId } })
                 }
@@ -243,7 +262,7 @@ export default function PerfilEmpresa() {
                     }}
                   >
                     <div className="card-body">
-                      <h5 className="card-title">{producto.nombre}</h5>
+                      <h5 className="card-title text-wrap">{producto.nombre}</h5>
                       <p className="card-text text-truncate">{producto.descripcion}</p>
                       <p className="text-muted mb-0">Precio: ${producto.precio}</p>
                     </div>
