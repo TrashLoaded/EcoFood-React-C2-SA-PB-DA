@@ -19,6 +19,14 @@ export default function ProductoModal({ productoEditar, onGuardar, onCerrar }) {
     }
   }, [productoEditar]);
 
+  useEffect(() => {
+    if (formData.cantidad === 0 && formData.estado !== "agotado") {
+      setFormData(prev => ({ ...prev, estado: "agotado" }));
+    } else if (formData.cantidad > 0 && formData.estado === "agotado") {
+      setFormData(prev => ({ ...prev, estado: "disponible" }));
+    }
+  }, [formData.cantidad]);
+
   const validar = () => {
     const { nombre, descripcion, vencimiento, cantidad, precio, estado } = formData;
     if (!nombre.trim()) {
@@ -41,8 +49,8 @@ export default function ProductoModal({ productoEditar, onGuardar, onCerrar }) {
       Swal.fire("Error", "La fecha de vencimiento debe ser hoy o futura", "warning");
       return false;
     }
-    if (cantidad <= 0) {
-      Swal.fire("Error", "La cantidad debe ser mayor que cero", "warning");
+    if (cantidad < 0) {
+      Swal.fire("Error", "La cantidad no puede ser negativa", "warning");
       return false;
     }
     if (precio < 0) {
@@ -123,12 +131,11 @@ export default function ProductoModal({ productoEditar, onGuardar, onCerrar }) {
               type="number"
               className="form-control mb-2"
               placeholder="Cantidad"
-              min={1}
+              min={0}
               value={formData.cantidad}
               onChange={(e) =>
                 setFormData({ ...formData, cantidad: Number(e.target.value) })
               }
-              minLength={1}
             />
             <small className="form-text text-muted">
               Precio
@@ -142,8 +149,8 @@ export default function ProductoModal({ productoEditar, onGuardar, onCerrar }) {
               onChange={(e) =>
                 setFormData({ ...formData, precio: Number(e.target.value) })
               }
-              minLength={0}
             />
+            <small className="form-text text-muted mt-2">Estado: {formData.estado}</small>
           </div>
           <div className="modal-footer">
             <button className="btn btn-secondary" onClick={onCerrar}>

@@ -4,7 +4,6 @@ import Register from "../pages/Register";
 import Home from "../pages/Home";
 import ProtectedRoute from "./ProtectedRoute";
 import ProtectedByRole from "./ProtectedByRole";
-import ClienteDashboard from "../pages/cliente/ClienteDashboard";
 import AdminLayout from "../components/layouts/Admin/AdminLayout";
 import AdminDashboard from "../pages/admin/AdminDashboard";
 import AdminProductos from "../pages/admin/AdminProductos";
@@ -17,8 +16,11 @@ import ResetPassword from "../pages/ResetPassword";
 import NotFound from "../pages/NotFound";
 import PerfilEmpresa from "../pages/empresa/PerfilEmpresa";
 import ProductosEmpresa from "../pages/empresa/ProductosEmpresa";
-
-
+import HomeCliente from "../pages/cliente/HomeCliente";
+import VerProductos from "../pages/cliente/VerProductos";
+import MisPedidos from "../pages/cliente/MisPedidos";
+import EditarPerfil from "../pages/cliente/EditarPerfil";
+import PedidosEmpresa from "../pages/empresa/PedidosEmpresa";
 
 export default function AppRouter() {
   return (
@@ -41,7 +43,31 @@ export default function AppRouter() {
         path="/cliente/home"
         element={
           <ProtectedByRole allowed={["cliente"]}>
-            <ClienteDashboard />
+            <HomeCliente />
+          </ProtectedByRole>
+        }
+      />
+      <Route
+        path="/cliente/productos"
+        element={
+          <ProtectedByRole allowed={["cliente"]}>
+            <VerProductos />
+          </ProtectedByRole>
+        }
+      />
+      <Route
+        path="/cliente/pedidos"
+        element={
+          <ProtectedByRole allowed={["cliente"]}>
+            <MisPedidos />
+          </ProtectedByRole>
+        }
+      />
+      <Route
+        path="/cliente/perfil"
+        element={
+          <ProtectedByRole allowed={["cliente"]}>
+            <EditarPerfil />
           </ProtectedByRole>
         }
       />
@@ -78,6 +104,15 @@ export default function AppRouter() {
           </ProtectedByRole>
         }
       />
+      <Route
+        path="/empresa/pedidos"
+        element={
+          <ProtectedByRole allowed={["empresa"]}>
+            <PedidosEmpresa />
+          </ProtectedByRole>
+        }
+      />
+
 
       <Route path="*" element={<NotFound />} />
     </Routes>

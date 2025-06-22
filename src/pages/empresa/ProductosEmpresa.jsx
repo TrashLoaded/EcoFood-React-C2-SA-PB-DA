@@ -254,7 +254,14 @@ export default function ProductosEmpresa() {
             onCerrar={() => setShowModal(false)}
           />
         </div>
+        
       )}
+          <button
+            className="btn btn-outline-info m-2"
+            onClick={() => navigate("/empresa/pedidos")}
+          >
+            Ver Pedidos Recibidos
+          </button>
     </div>
   );
 }
