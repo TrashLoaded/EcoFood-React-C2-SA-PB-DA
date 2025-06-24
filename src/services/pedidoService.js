@@ -138,6 +138,12 @@ export async function solicitarProducto(producto, cantidad) {
     clienteNombre = usuarioData.nombre || clienteNombre;
   }
 
+  let clienteComuna = "Nombre no disponible";
+  if (usuarioSnap.exists()) {
+    const usuarioData = usuarioSnap.data();
+    clienteComuna = usuarioData.comuna || clienteComuna;
+  }
+
   const pedidosRef = collection(getFirestore(), "pedidos");
   const q = query(
     pedidosRef,
@@ -154,6 +160,7 @@ export async function solicitarProducto(producto, cantidad) {
   const pedido = {
     clienteId: uid,
     clienteNombre,
+    clienteComuna,
     productoId: producto.id,
     empresaId: producto.empresaId,
     cantidadSolicitada: cantidad,

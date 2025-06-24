@@ -72,7 +72,9 @@ export default function PedidosEmpresa() {
                   <strong>{pedido.productoNombre}</strong><br />
                   Cantidad: {pedido.cantidadSolicitada}<br />
                   Cliente: {pedido.clienteNombre}<br />
+                  Dirección: {pedido.clienteComuna}<br/>
                   Estado: <span className={`badge ${pedido.estado === "pendiente" ? "bg-warning text-dark" : pedido.estado === "aprobado" ? "bg-success" : "bg-danger"}`}>{pedido.estado}</span>
+                  <p className="text-muted small">Fecha: {pedido.fecha}</p>
                 </div>
                 {pedido.estado === "pendiente" && (
                   <div className="btn-group">
